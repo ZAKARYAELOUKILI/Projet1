@@ -6,14 +6,16 @@ import Footer from './components/Footer';
 import Home from './components/Home';
 import PostDetails from "./components/posts/PostDetails";
 import CreatePosts from "./components/posts/CreatePosts";
+import LisPersone from "./UseReducer/ListePerr";
   function App() {
   return (
     <Router>
    <div className="App">
     <Header/>
     <main>
+    <LisPersone/>
       <Routes>
-
+      
       <Route path="/"Component={Home}/>
       <Route path="/post/:id"Component={PostDetails}/>
       <Route path="/create"Component={CreatePosts}/>
