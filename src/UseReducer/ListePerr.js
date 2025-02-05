@@ -1,70 +1,65 @@
 import { useReducer, useRef } from "react";
-
-
+import PersonList from './PersonList'; 
 
 const LisPersone = () => {
+    const Nom = useRef();
+    const Prenom = useRef();
+    const Age = useRef();
 
-    const inputRef = useRef();
-    const inputRef1 = useRef();
-    const inputRef2 = useRef();
-
-
-    const [List, dispatch] = useReducer((state = [], action) => {
+    const [list, dispatch] = useReducer((state = [], action) => {
         switch (action.type) {
             case 'add_task': {
                 return [
                     ...state,
-                    { id: state.length, 
-                        nom: action.nom ,
-                         prenom: action.prenom ,
+                    { 
+                        id:state.length,
+                         nom: action.nom,
+                         prenom: action.prenom,
                           age: action.age }
-                ]
+                ];
             }
             case 'remove_task': {
-                return state.filter((task, index) => index !== action.index);
+                return state.filter(task => task.id !== action.id);
             }
             default: {
                 return state;
             }
         }
-    });
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch({
-            type: 'add_task',
-            nom: inputRef.current.value ,
-            prenom: inputRef1.current.value,
-            age: inputRef2.current.value
+        const nom = Nom.current.value;
+        const prenom = Prenom.current.value;
+        const age = Age.current.value;
 
-        });
-    }
+        if (nom && prenom && age) {
+            dispatch({ type: 'add_task', nom, prenom, age });
+            Nom.current.value.trim() ;
+            Prenom.current.value.trim();
+            Age.current.value.trim() ;
+        }
+    };
 
-    return <div className="flex"  style={{flexDirection:"column"}}> 
-        <h1>Liste avec UseReducer</h1>
-        <form onSubmit={handleSubmit} id="Formstyle" className="flex" style={{flexDirection:"column"}}>
-            <label>Nom : </label>
-            <input type="text" name="nom" ref={inputRef} />
-            <label>Prenom  : </label>
-            <input type="text" name="prenom" ref={inputRef1} />
-            <label>age : </label>
-            <input type="text" name="age" ref={inputRef2} />
-            <input  style={{marginTop:"30px"}} type="submit" value="Ajouter" />
-        </form>
-        <div >
-            {List && List.map((List, index) => (
-                <div className="app" key={index} style={{border:"solid teal 5px",margin:"15px"}}>
-                    <p> votre nom est :{List.nom}</p>
-                    <p> votre prenom est :{List.prenom}</p>
-                    <p> votre age est : {List.age}</p>
-
-                    <button onClick={() => dispatch({ type: 'remove_task', index })}>
-                        Supprimer
-                    </button>
-                </div>
-            ))}
+    return (
+        <div className="flex" style={{ flexDirection: "column" }}>
+            <h1> Liste aver UseReducer</h1>
+            <form onSubmit={handleSubmit} id="Formstyle" className="flex" style={{ flexDirection: "column" }}>
+                <label> Nom :</label>
+                <input type="text" name="nom" ref={Nom} />
+                <label>Prenom  :</label>
+                <input type="text" name="prenom" ref={Prenom} />
+                <label>Age  :</label>
+                <input type="text" name="age" ref={Age} />
+                <input style={{ marginTop: "30px" }} type="submit" value="ajouter" />
+            </form>
+            <PersonList list={list} onRemove={(id) => dispatch({ type: 'remove_task', id })} />
         </div>
-    </div>
-}
+    );
+};
 
 export default LisPersone;
+
+
+
+
