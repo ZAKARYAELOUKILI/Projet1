@@ -1,30 +1,46 @@
-
-import {BrowserRouter as Router , Routes , Route} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Routes,
+  Route,
+} from "react-router-dom";
 import "./App.css";
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './components/Home';
-import PostDetails from "./components/posts/PostDetails";
+import Header from "./components/Header";
+import Home from "./components/Home";
+
 import CreatePosts from "./components/posts/CreatePosts";
-  function App() {
+import Login from "./components/Login";
+import { useState } from "react";
+import LisPersone from "./components/composantsProjet2/LisPersone";
+
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
   return (
     <Router>
-   <div className="App">
-    <Header/>
-    <main>
+      <Header></Header>
+
       <Routes>
-
-      <Route path="/"Component={Home}/>
-      <Route path="/post/:id"Component={PostDetails}/>
-      <Route path="/create"Component={CreatePosts}/>
-      </Routes>
-      
-    </main>
-    <Footer/>
-
-   </div>
-    </Router>
+        <Route
+          path="/"
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/Create"
+          element={isAuthenticated ? <CreatePosts /> : <Navigate to="/login" />}
+        />
+         <Route
+   path="/zzz"
+   element={isAuthenticated ? <LisPersone /> : <Navigate to="/login" />}
+ />
+    <Route path="/Login" element={<Login onLogin={handleLogin} />} />
     
+      </Routes>
+    </Router>
   );
 }
 
